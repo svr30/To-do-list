@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List with Animated Background</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #fce4ec; /* Light pink background */
+            animation: gradientAnimation 20s infinite linear;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Container Styles */
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header Styles */
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+
+        /* Task Styles */
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            animation: fadeInUp 0.5s ease;
+            transition: transform 0.3s ease;
+        }
+        .task:hover {
+            transform: translateY(-5px);
+        }
+        .task .task-name {
+            flex: 1;
+            color: #333;
+            font-size: 16px;
+        }
+        .task.completed .task-name {
+            text-decoration: line-through;
+            color: #999;
+        }
+        .task .task-actions {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .task .task-actions button {
+            background-color: #f48fb1; /* Pink button background */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-left: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .task .task-actions button.complete {
+            background-color: #81c784; /* Light green complete button */
+        }
+        .task .task-actions button.delete {
+            background-color: #ffab91; /* Light orange delete button */
+        }
+        .task .task-actions button:hover {
+            opacity: 0.8;
+        }
+
+        /* Form Styles */
+        .task-form {
+            display: flex;
+            margin-top: 20px;
+            background-color: #fff3e0; /* Light orange form background */
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .task-form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+        }
+        .task-form button {
+            padding: 10px 20px;
+            background-color: #f48fb1; /* Pink button background */
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .task-form button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div id="task-list"></div>
+        <form id="task-form" class="task-form">
+            <input type="text" id="task-input" placeholder="Add a task..." required>
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const taskForm = document.getElementById('task-form');
+            const taskInput = document.getElementById('task-input');
+            const taskList = document.getElementById('task-list');
+
+            // Function to create a new task item
+            function createTask(taskName) {
+                const task = document.createElement('div');
+                task.classList.add('task');
+                task.innerHTML = `
+                    <div class="task-name">${taskName}</div>
+                    <div class="task-actions">
+                        <button class="complete">Complete</button>
+                        <button class="delete">Delete</button>
+                    </div>
+                `;
+                return task;
+            }
+
+            // Event listener for form submission (adding a task)
+            taskForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const taskName = taskInput.value.trim();
+                if (taskName !== '') {
+                    const task = createTask(taskName);
+                    taskList.appendChild(task);
+                    taskInput.value = '';
+                }
+            });
+
+            // Event delegation for task completion and deletion
+            taskList.addEventListener('click', function(e) {
+                if (e.target.classList.contains('complete')) {
+                    const task = e.target.closest('.task');
+                    task.classList.toggle('completed');
+                }
+                if (e.target.classList.contains('delete')) {
+                    const task = e.target.closest('.task');
+                    task.remove();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
